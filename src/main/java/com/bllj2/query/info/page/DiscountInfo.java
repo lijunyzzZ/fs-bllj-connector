@@ -4,8 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * <p>Copyright: Copyright (c) 2020</p>
- * <p>succez</p>
+ *
  * 折扣结果，在{@link com.bllj2.query.info.PageResult}的泛型中使用
  * @author lijuny
  */

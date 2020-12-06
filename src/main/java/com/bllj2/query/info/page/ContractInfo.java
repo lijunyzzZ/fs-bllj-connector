@@ -1,13 +1,14 @@
 package com.bllj2.query.info.page;
 
-import java.util.List;
+import java.math.BigDecimal;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * <p>Copyright: Copyright (c) 2020</p>
- * <p>succez</p>
+ *
  * 合同结果，在{@link com.bllj2.query.info.PageResult}的泛型中使用
  *
  * @author lijuny
@@ -15,20 +16,30 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ContractInfo {
-	private String name;
+	//id不返回到前端，忽略掉
+	@JsonIgnore
+	private long contractId;
 	private String contractNumber;
-	private String storeName;
+	private String contractType;
 	private String accountNo;
-	private String startDate;
-	private String endDate;
+	private String store;
 	private String storeType;
-	private boolean trueContract;
-	private String discount;
+	private boolean prcContract;
+	private long startDate;
+	private long endDate;
+	private String signerId;
+	private String signerName;
+	private long signerDate;
+	private BigDecimal completeDisCount;
+	private BigDecimal discountTargetRate;
+	private BigDecimal extraDiscount;
 	private String contractVersion;
-	private String activitySession;
+	private long activitySession;
 	private String contractState;
-	private boolean standardContract;
-	private List<TransferContractDetailVo> transferContractDetailVos;
-	private List<TransferContractStoreVo> transferContractStoreVos;
+	private String poNo;
+	private String targetBase;
+	private long createTime;
+	private long lastModifiedTime;
+
 
 }

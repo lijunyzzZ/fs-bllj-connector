@@ -4,8 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * <p>Copyright: Copyright (c) 2020</p>
- * <p>succez</p>
+ *
  * 接口返回的结果信息
  * @author lijuny
  * @date 2020/10/27
@@ -20,7 +19,7 @@ public class ResponseResult<T> {
 	/**
 	 * 相应的状态码
 	 */
-	private int code;
+	private int rtcode;
 	/**
 	 * 响应体的结果
 	 */

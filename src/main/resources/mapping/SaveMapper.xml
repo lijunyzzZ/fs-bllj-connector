@@ -1,0 +1,32 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bllj2.query.mapper.SaveMapper" >
+
+    <insert id="savePoint" parameterType="com.bllj2.query.info.SavePointArgs" >
+    if  not exists (select 1 from DOLPHIN_MONTHLY_POINT_SUMMARY where outlet_no = #{accountNo} and name =#{name}  )
+
+        INSERT INTO DOLPHIN_MONTHLY_POINT_SUMMARY
+        (contract_number, outlet_no, outlet_name, payment_date, point_earned, name, create_time, last_modified_time)
+        VALUES(#{contractNumber}, #{accountNo}, #{store}, #{paymentDate}, #{pointEarned}, #{name}, GETDATE(),GETDATE() );
+    else
+        update DOLPHIN_MONTHLY_POINT_SUMMARY
+            set payment_date = #{paymentDate} ,
+                contract_number = #{contractNumber},
+                outlet_name = #{store},
+                point_earned = #{pointEarned},
+                last_modified_time = GETDATE()
+        where outlet_no = #{accountNo} and name =#{name}
+    </insert>
+    <insert id="savePicture" parameterType="com.bllj2.query.info.SaveSignPictureArgs">
+    if not exists  (select 1 from DOLPHIN_CONTRACT_SINGER_PICTURE where contract_number = #{contractNumber})
+        INSERT INTO DOLPHIN_CONTRACT_SINGER_PICTURE
+            (contract_number, picture_url, create_time, last_modified_time)
+        VALUES(#{contractNumber}, #{pictureUrl}, GETDATE(), GETDATE());
+    else
+        update DOLPHIN_CONTRACT_SINGER_PICTURE set picture_url = #{pictureUrl} , last_modified_time =GETDATE()
+         where contract_number = #{contractNumber}
+    </insert>
+
+    <update id="updateContract" parameterType="com.bllj2.query.info.SaveSignPictureArgs" >
+        update DOLPHIN_CONTRACT set signer_id = #{signerId}, signer_name = #{signerName}, sign_Date =#{signDate} where contract_number = #{contractNumber}
+    </update>
+</mapper>

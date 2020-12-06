@@ -1,13 +1,14 @@
 package com.bllj2.query.info;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * <p>Copyright: Copyright (c) 2020</p>
- * <p>succez</p>
+ *
  * 分页查询的结果
  * @author lijuny
  */
@@ -38,4 +39,12 @@ public class PageResult<T> {
 	 * 数据
 	 */
 	private List<T> data;
+
+	public static <V> PageResult<V> create(QueryPageArgs args, List<V> data ){
+		PageResult<V> vPageResult = new PageResult<>();
+		vPageResult.setPageNum(args.getPageNum());
+		vPageResult.setPageSize(args.getPageSize());
+		vPageResult.setData(data);
+		return vPageResult;
+	}
 }
