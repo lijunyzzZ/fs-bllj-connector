@@ -46,15 +46,15 @@ public class ContractsQueryController {
 		QueryPageArgs args = new QueryPageArgs(pageNum, pageSize, startTime, endTime, accountNo, poNo, null);
 		log.info("/contracts/findBypage,{}", args);
 		int total = queryService.queryContractCount(args);
-		int totalPage = total % args.getPageSize() == 0 ? total / args.getPageSize() : total/ args.getPageSize() + 1;
-		if (totalPage < args.getPageNum() - 1) {
+		int totalPage = total % args.getPageSize() == 0 ? total / args.getPageSize() : total / args.getPageSize() + 1;
+		if (totalPage < args.getPageNum() - 1 && totalPage != 0) {
 			throw new BaseException("pageNum大于总页数");
 		}
 		List<ContractResultInfo> result = queryService.queryContracts(args);
 		PageResult<ContractResultInfo> pageResult = PageResult.create(args, result);
 		pageResult.setTotal(total);
 		pageResult.setTotalPage(totalPage);
-		pageResult.setLastPage(args.getPageNum() == total);
+		pageResult.setLastPage(args.getPageNum() >= totalPage);
 		return ResponseResultUtils.success(pageResult);
 	}
 

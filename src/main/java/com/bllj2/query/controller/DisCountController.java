@@ -45,14 +45,14 @@ public class DisCountController {
 		log.info("/discounts/findBypage,{}", args);
 		int total = queryService.queryDisCount(args);
 		int totalPage = total % args.getPageSize() == 0 ? total / args.getPageSize() : total/ args.getPageSize() + 1;
-		if (totalPage <= args.getPageNum() - 1) {
+		if (totalPage <= args.getPageNum() - 1 && totalPage != 0) {
 			throw new BaseException("pageNum大于总页数");
 		}
 		List<ContractDiscountInfo> result = queryService.queryContractDiscount(args);
 		PageResult<ContractDiscountInfo> contractDiscountInfoPageResult = PageResult.create(args, result);
 		contractDiscountInfoPageResult.setTotal(total);
 		contractDiscountInfoPageResult.setTotalPage(totalPage);
-		contractDiscountInfoPageResult.setLastPage(args.getPageNum() == total);
+		contractDiscountInfoPageResult.setLastPage(args.getPageNum() >= totalPage);
 		return ResponseResultUtils.success(contractDiscountInfoPageResult);
 	}
 }

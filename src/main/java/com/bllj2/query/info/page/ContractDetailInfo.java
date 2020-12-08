@@ -3,6 +3,8 @@ package com.bllj2.query.info.page;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,8 +17,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ContractDetailInfo {
+	@JsonIgnore
 	private long contractDetailId;
 	private String subBrandNo;
+	private String subBrandName;
 	private BigDecimal targetVolume;
 	private BigDecimal targetValue;
 	private boolean keySubbranch;
@@ -48,6 +52,7 @@ public class ContractDetailInfo {
 		contractDetailInfo.setTargetValue(result.getTargetValue());
 		contractDetailInfo.setTargetVolume(result.getTargetVolume());
 		contractDetailInfo.setSubBrandNo(result.getSubBrandNo());
+		contractDetailInfo.setSubBrandName(result.getSubBrandName());
 		return contractDetailInfo;
 	}
 }

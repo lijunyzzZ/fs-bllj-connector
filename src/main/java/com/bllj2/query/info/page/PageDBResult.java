@@ -46,6 +46,7 @@ public class PageDBResult {
 	 */
 	private long contractDetailId = -1; //赋一个初始值，这样就知道数据库里面查出来的值里面有没有对应的 contractDetailId，没有就不需要返回到query里面detail的list
 	private String subBrandNo;
+	private String subBrandName;
 	private BigDecimal targetVolume;
 	private BigDecimal targetValue;
 	private boolean keySubbranch;
