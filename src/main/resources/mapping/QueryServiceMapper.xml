@@ -11,7 +11,7 @@
 		where ( contract_number = #{contractNumber} or #{contractNumber} is null)
 			and  CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time) &gt;  #{startTime}
 		 and CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time)  &lt;  #{endTime}
-		 	order by contract_discount_id offset (#{pageNum} - 1) row fetch next ${pageSize} row only
+		 	order by contract_discount_id offset (#{pageNum} - 1) * #{pageSize} row fetch next ${pageSize} row only
     </select>
 
 	<select id="queryContract" parameterType="com.bllj2.query.info.QueryPageArgs"
@@ -53,14 +53,12 @@
  	D.outlet_no as 'store_outlet_no',
  	CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', D.create_time)) * 60000 + DATEPART(S, D.create_time) * 1000 + DATEPART(MS, D.create_time) as 'store_create_time',
  	CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', D.last_modified_time)) * 60000 + DATEPART(S, D.last_modified_time) * 1000 + DATEPART(MS, D.last_modified_time) as 'store_last_modified_time'
-	 from (select
-	*
-from
-	DOLPHIN_CONTRACT
+	 from
+	 (select * from	DOLPHIN_CONTRACT
 	where (outlet_no = #{accountNo} or #{accountNo} is null ) and (po_no =#{poNo} or #{poNo} is null )
  	and CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time) &gt;  #{startTime}
 		 and CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time)  &lt;  #{endTime}
-		order by contract_id offset (#{pageNum} -1 ) row fetch next ${pageSize} row only
+		order by contract_id offset (#{pageNum} -1 ) * #{pageSize}  row fetch next ${pageSize} row only
 )
 	A
 left outer JOIN DOLPHIN_CONTRACT_DETAIL B on B.contract_number = a.contract_number
