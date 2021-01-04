@@ -18,7 +18,7 @@ import lombok.Setter;
 @Setter
 public class ContractDetailInfo {
 	@JsonIgnore
-	private long contractDetailId;
+	private String contractDetailId;
 	private String subBrandNo;
 	private String subBrandName;
 	private BigDecimal targetVolume;
@@ -41,7 +41,7 @@ public class ContractDetailInfo {
 	}
 
 	public static ContractDetailInfo create(PageDBResult result) {
-		if (result.getContractDetailId() < 0) {
+		if (result.getContractDetailId() == null) {
 			return null;
 		}
 		ContractDetailInfo contractDetailInfo = new ContractDetailInfo();

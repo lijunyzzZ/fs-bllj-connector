@@ -18,7 +18,7 @@ import lombok.Setter;
 public class ContractStoreInfo {
 	//id不返回到前端，忽略掉
 	@JsonIgnore
-	private long contractStoreId;
+	private String contractStoreId;
 	private String branchStore;
 	private String storeNumber;
 	private long createTime;
@@ -38,7 +38,7 @@ public class ContractStoreInfo {
 	}
 
 	public static ContractStoreInfo create(PageDBResult result) {
-		if (result.getContractStoreId() < 0 ) {
+		if (result.getContractStoreId() == null ) {
 			return null;
 		}
 		ContractStoreInfo contractStoreInfo = new ContractStoreInfo();

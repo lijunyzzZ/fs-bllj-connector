@@ -1,6 +1,7 @@
 package com.bllj2.query.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.bllj2.query.info.QueryPageArgs;
 import com.bllj2.query.info.page.ContractDiscountInfo;
@@ -26,4 +27,6 @@ public interface QueryServiceMapper {
 	List<ContractDiscountInfo> queryDiscount(QueryPageArgs args);
 
 	int countDiscount(QueryPageArgs args);
+
+	Map<String, Object> queryContractOne(String contractNumber);
 }

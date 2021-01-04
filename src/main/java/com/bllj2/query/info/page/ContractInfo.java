@@ -18,7 +18,7 @@ import lombok.Setter;
 public class ContractInfo {
 	//id不返回到前端，忽略掉
 	@JsonIgnore
-	private long contractId;
+	private String contractId;
 	private String contractNumber;
 	private String contractType;
 	private String accountNo;

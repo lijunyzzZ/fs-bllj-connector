@@ -1,6 +1,7 @@
 package com.bllj2.query.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.bllj2.query.info.QueryPageArgs;
 import com.bllj2.query.info.page.ContractDiscountInfo;
@@ -22,4 +23,5 @@ public interface QueryService {
 
 	int queryDisCount(QueryPageArgs args);
 
+	Map<String, Object> queryContract(String contractNumber);
 }

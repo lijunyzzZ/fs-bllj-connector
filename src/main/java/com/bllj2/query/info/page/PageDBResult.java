@@ -2,6 +2,7 @@ package com.bllj2.query.info.page;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
+import java.util.Objects;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +20,7 @@ public class PageDBResult {
 	/**
 	 * 主表
 	 */
-	private long contractId;
+	private String contractId;
 	private String contractType;
 	private String contractNumber;
 	private String outletNo;
@@ -44,7 +45,7 @@ public class PageDBResult {
 	/**
 	 * 合同明细
 	 */
-	private long contractDetailId = -1; //赋一个初始值，这样就知道数据库里面查出来的值里面有没有对应的 contractDetailId，没有就不需要返回到query里面detail的list
+	private String contractDetailId; //赋一个初始值，这样就知道数据库里面查出来的值里面有没有对应的 contractDetailId，没有就不需要返回到query里面detail的list
 	private String subBrandNo;
 	private String subBrandName;
 	private BigDecimal targetVolume;
@@ -56,7 +57,7 @@ public class PageDBResult {
 	/**
 	 * 覆盖门店
 	 */
-	private long contractStoreId = -1;
+	private String contractStoreId;
 	private String storeOutletName;
 	private String storeOutletNo;
 	private long storeCreateTime;
@@ -67,17 +68,17 @@ public class PageDBResult {
 	 */
 
 	public static Comparator<PageDBResult> pageDBResultComparator = (o1, o2) -> {
-		long contractId1 = o1.getContractId();
-		long contractId2 = o2.getContractId();
-		if (contractId1 != contractId2) {
-			return Long.compare(contractId1, contractId2);
+		String contractId1 = o1.getContractId();
+		String contractId2 = o2.getContractId();
+		if (!Objects.equals(contractId1,contractId2)) {
+			return contractId1.compareTo(contractId2);
 		}
-		long contractDetailId1 = o1.getContractDetailId();
-		long contractDetailId2 = o2.getContractDetailId();
-		if (contractDetailId1 != contractDetailId2) {
-			return Long.compare(contractDetailId1, contractDetailId2);
+		String contractDetailId1 = o1.getContractDetailId();
+		String contractDetailId2 = o2.getContractDetailId();
+		if (!Objects.equals(contractDetailId1,contractDetailId2)) {
+            return contractDetailId1.compareTo(contractDetailId2);
 		}
-		return Long.compare(o1.getContractStoreId(), o2.getContractStoreId());
+		return o1.getContractStoreId().compareTo(o2.getContractStoreId());
 	};
 
 }

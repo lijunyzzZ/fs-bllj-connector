@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.bllj2.query.info.QueryPageArgs;
@@ -53,6 +54,11 @@ public class QueryServiceImpl implements QueryService {
 		return mapper.countDiscount(args);
 	}
 
+	@Override
+	public Map<String, Object> queryContract(String contractNumber) {
+		return mapper.queryContractOne(contractNumber);
+	}
+
 
 	/**
 	 * 将查询出来的笛卡尔积分组。
@@ -66,7 +72,7 @@ public class QueryServiceImpl implements QueryService {
 		}
 		List<List<PageDBResult>> res = new ArrayList<>();
 		List<PageDBResult> current = new ArrayList<>();
-		long currentId = results.get(0).getContractId();
+		String currentId = results.get(0).getContractId();
 		for (PageDBResult result : results) {
 			if (result.getContractId() == currentId) {
 				current.add(result);
@@ -109,9 +115,13 @@ public class QueryServiceImpl implements QueryService {
 		 * 保证每次返回的数据都是有序的，这里用list sort 排序，依据是id（这个id是不会返回到前端的）
 		 */
 		List<ContractStoreInfo> contractStoreInfos = new ArrayList<>(storeInfos);
-		contractStoreInfos.sort(Comparator.comparingLong(ContractStoreInfo::getContractStoreId));
+//		contractStoreInfos.sort((o1, o2) -> {
+//			return String.CASE_INSENSITIVE_ORDER.compare(o1.getContractStoreId(), o2.getContractStoreId());
+//		});
 		List<ContractDetailInfo> contractDetailInfos = new ArrayList<>(detailInfos);
-		contractStoreInfos.sort(Comparator.comparingLong(ContractStoreInfo::getContractStoreId));
+//		contractDetailInfos.sort((o1, o2) -> {
+//			return String.CASE_INSENSITIVE_ORDER.compare(o1.getContractDetailId(), o2.getContractDetailId());
+//		});
 		contractResultInfo.getContractStores().addAll(contractStoreInfos);
 		contractResultInfo.getContractDetails().addAll(contractDetailInfos);
 		return contractResultInfo;

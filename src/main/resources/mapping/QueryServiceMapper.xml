@@ -1,82 +1,85 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.bllj2.query.mapper.QueryServiceMapper">
 
-    <select id="queryDiscount" parameterType="com.bllj2.query.info.QueryPageArgs"
-            resultType="com.bllj2.query.info.page.ContractDiscountInfo">
+	<select id="queryDiscount" parameterType="com.bllj2.query.info.QueryPageArgs"
+			resultType="com.bllj2.query.info.page.ContractDiscountInfo">
 		select contract_number, payment_request_no, wholesaler_name, payment_amount, confirm,
- 	CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', confirm_time)) * 60000 + DATEPART(S, confirm_time) * 1000 + DATEPART(MS, confirm_time) as 'confirm_time',
- 	CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', create_time)) * 60000 + DATEPART(S, create_time) * 1000 + DATEPART(MS, create_time) as 'create_time',
- 	CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time) as 'last_modified_time'
-		from DOLPHIN_CONTRACT_DISCOUNT
+		CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', confirm_time)) * 60000 + DATEPART(S, confirm_time) * 1000 + DATEPART(MS, confirm_time) as 'confirm_time',
+		CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', create_time)) * 60000 + DATEPART(S, create_time) * 1000 + DATEPART(MS, create_time) as 'create_time',
+		CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time) as 'last_modified_time'
+		from fxiaoke.DOLPHIN_CONTRACT_DISCOUNT
 		where ( contract_number = #{contractNumber} or #{contractNumber} is null)
-			and  CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time) &gt;  #{startTime}
-		 and CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time)  &lt;  #{endTime}
-		 	order by contract_discount_id offset (#{pageNum} - 1) * #{pageSize} row fetch next ${pageSize} row only
-    </select>
+		and  CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time) &gt;  #{startTime}
+		and CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time)  &lt;  #{endTime}
+		order by contract_discount_id offset (#{pageNum} - 1) * #{pageSize} row fetch next ${pageSize} row only
+	</select>
 
 	<select id="queryContract" parameterType="com.bllj2.query.info.QueryPageArgs"
 			resultType="com.bllj2.query.info.page.PageDBResult">
-	select
-	A.contract_id,
-	A.contract_type,
-	A.contract_number,
- 	A.outlet_no,
- 	A.outlet_name,
- 	A.outlet_type,
- 	A.prc_contract,
- 	CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', A.start_date)) * 60000 + DATEPART(S, A.start_date) * 1000 + DATEPART(MS, A.start_date) as 'start_date',
- 	CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', A.end_date)) * 60000 + DATEPART(S, A.end_date) * 1000 + DATEPART(MS, A.end_date) as 'end_date',
- 	A.signer_id,
- 	A.signer_name,
- 	CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', A.sign_date)) * 60000 + DATEPART(S, A.sign_date) * 1000 + DATEPART(MS, A.sign_date) as 'sign_date',
- 	A.complete_discount,
- 	A.discount_target_rate,
- 	A.extra_discount,
- 	A.activity_session,
- 	A.contract_version,
- 	A.contract_state,
- 	A.po_no,
- 	A.target_base,
- 	CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', A.create_time)) * 60000 + DATEPART(S, A.create_time) * 1000 + DATEPART(MS, A.create_time) as 'create_time',
- 	CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', A.last_modified_time)) * 60000 + DATEPART(S, A.last_modified_time) * 1000 + DATEPART(MS, A.last_modified_time) as 'last_modified_time',
- 	B.contract_detail_id,
-	B.sub_brand_name,
-	B.sub_brand_No,
-	B.target_volume,
- 	B.target_value,
- 	B.key_subbrand,
- 	B.create_time,
- 	CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', B.create_time)) * 60000 + DATEPART(S, B.create_time) * 1000 + DATEPART(MS, B.create_time) as 'detail_create_time',
- 	CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', B.last_modified_time)) * 60000 + DATEPART(S, B.last_modified_time) * 1000 + DATEPART(MS, B.last_modified_time) as 'detail_last_modified_time',
- 	D.contract_store_id,
- 	D.outlet_name as 'store_outlet_name',
- 	D.outlet_no as 'store_outlet_no',
- 	CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', D.create_time)) * 60000 + DATEPART(S, D.create_time) * 1000 + DATEPART(MS, D.create_time) as 'store_create_time',
- 	CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', D.last_modified_time)) * 60000 + DATEPART(S, D.last_modified_time) * 1000 + DATEPART(MS, D.last_modified_time) as 'store_last_modified_time'
-	 from
-	 (select * from	DOLPHIN_CONTRACT
-	where (outlet_no = #{accountNo} or #{accountNo} is null ) and (po_no =#{poNo} or #{poNo} is null )
- 	and CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time) &gt;  #{startTime}
-		 and CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time)  &lt;  #{endTime}
+		select
+		A.contract_id,
+		A.contract_type,
+		A.contract_number,
+		A.outlet_no,
+		A.outlet_name,
+		A.outlet_type,
+		A.prc_contract,
+		CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', A.start_date)) * 60000 + DATEPART(S, A.start_date) * 1000 + DATEPART(MS, A.start_date) as 'start_date',
+		CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', A.end_date)) * 60000 + DATEPART(S, A.end_date) * 1000 + DATEPART(MS, A.end_date) as 'end_date',
+		A.signer_id,
+		A.signer_name,
+		CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', A.sign_date)) * 60000 + DATEPART(S, A.sign_date) * 1000 + DATEPART(MS, A.sign_date) as 'sign_date',
+		A.complete_discount,
+		A.discount_target_rate,
+		A.extra_discount,
+		A.activity_session,
+		A.contract_version,
+		A.contract_state,
+		A.po_no,
+		A.target_base,
+		CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', A.create_time)) * 60000 + DATEPART(S, A.create_time) * 1000 + DATEPART(MS, A.create_time) as 'create_time',
+		CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', A.last_modified_time)) * 60000 + DATEPART(S, A.last_modified_time) * 1000 + DATEPART(MS, A.last_modified_time) as 'last_modified_time',
+		B.contract_detail_id,
+		B.sub_brand_name,
+		B.sub_brand_No,
+		B.target_volume,
+		B.target_value,
+		B.key_subbrand,
+		B.create_time,
+		CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', B.create_time)) * 60000 + DATEPART(S, B.create_time) * 1000 + DATEPART(MS, B.create_time) as 'detail_create_time',
+		CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', B.last_modified_time)) * 60000 + DATEPART(S, B.last_modified_time) * 1000 + DATEPART(MS, B.last_modified_time) as 'detail_last_modified_time',
+		D.contract_store_id,
+		D.outlet_name as 'store_outlet_name',
+		D.outlet_no as 'store_outlet_no',
+		CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', D.create_time)) * 60000 + DATEPART(S, D.create_time) * 1000 + DATEPART(MS, D.create_time) as 'store_create_time',
+		CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', D.last_modified_time)) * 60000 + DATEPART(S, D.last_modified_time) * 1000 + DATEPART(MS, D.last_modified_time) as 'store_last_modified_time'
+		from
+		(select * from	fxiaoke.DOLPHIN_CONTRACT
+		where (outlet_no = #{accountNo} or #{accountNo} is null ) and (po_no =#{poNo} or #{poNo} is null ) and type = 'BRSF'
+		and CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time) &gt;  #{startTime}
+		and CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time)  &lt;  #{endTime}
 		order by contract_id offset (#{pageNum} -1 ) * #{pageSize}  row fetch next ${pageSize} row only
-)
-	A
-left outer JOIN DOLPHIN_CONTRACT_DETAIL B on B.contract_number = a.contract_number
-left outer join  DOLPHIN_CONTRACT_OUTLET D on D.contract_number = a.contract_number
+		)
+		A
+		left outer JOIN fxiaoke.DOLPHIN_CONTRACT_DETAIL B on B.contract_number = a.contract_number and B.sub_brand_No is not null
+		left outer join  fxiaoke.DOLPHIN_CONTRACT_OUTLET D on D.contract_number = a.contract_number
 
-    </select>
+	</select>
 	<select id="countContract" parameterType="com.bllj2.query.info.QueryPageArgs" resultType="int">
-		select count(*) from DOLPHIN_CONTRACT where (outlet_no = #{accountNo} or #{accountNo} is null) and (po_no =#{poNo} or #{poNo} is null )
-		 and CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time) &gt;  #{startTime}
-		 and CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time)  &lt;  #{endTime}
+		select count(*) from fxiaoke.DOLPHIN_CONTRACT where (outlet_no = #{accountNo} or #{accountNo} is null) and (po_no =#{poNo} or #{poNo} is null )
+		and CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time) &gt;  #{startTime}
+		and CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time)  &lt;  #{endTime}
 	</select>
 
 	<select id="countDiscount" parameterType="com.bllj2.query.info.QueryPageArgs" resultType="int">
-		select count(*) from DOLPHIN_CONTRACT_DISCOUNT where ( contract_number =#{contractNumber} or #{contractNumber} is null)
+		select count(*) from fxiaoke.DOLPHIN_CONTRACT_DISCOUNT where ( contract_number =#{contractNumber} or #{contractNumber} is null)
 		AND
 		CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time) &gt;  #{startTime}
-		 and CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time)  &lt;  #{endTime}
+		and CONVERT(BIGINT,DATEDIFF(MI,'1970-01-01 00:00:00.000', last_modified_time)) * 60000 + DATEPART(S, last_modified_time) * 1000 + DATEPART(MS, last_modified_time)  &lt;  #{endTime}
 	</select>
 
+	<select id="queryContractOne" resultType="Map">
+		select outlet_no,po_no from fxiaoke.DOLPHIN_CONTRACT where (contract_number = #{0})
+	</select>
 
 </mapper>

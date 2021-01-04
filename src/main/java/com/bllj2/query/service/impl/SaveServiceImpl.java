@@ -1,18 +1,17 @@
 package com.bllj2.query.service.impl;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLConnection;
+import java.util.Map;
 import java.util.UUID;
 
 import com.bllj2.query.exception.BaseException;
 import com.bllj2.query.info.SavePointArgs;
 import com.bllj2.query.info.SaveSignPictureArgs;
+import com.bllj2.query.mapper.QueryServiceMapper;
 import com.bllj2.query.mapper.SaveMapper;
 import com.bllj2.query.service.SaveService;
 
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,13 +29,16 @@ import sun.misc.BASE64Decoder;
 @Service
 public class SaveServiceImpl implements SaveService {
 	private final SaveMapper mapper;
+
+	private final QueryServiceMapper queryServiceMapper;
 	private static final Logger logger = LoggerFactory.getLogger(SaveServiceImpl.class);
 
 	@Value("${saveFilePath}")
 	private String path;
 
-	public SaveServiceImpl(SaveMapper mapper) {
+	public SaveServiceImpl(SaveMapper mapper, QueryServiceMapper queryServiceMapper) {
 		this.mapper = mapper;
+		this.queryServiceMapper = queryServiceMapper;
 	}
 
 	@Override
@@ -63,9 +65,12 @@ public class SaveServiceImpl implements SaveService {
 		}
 		try {
 			String fileType = getFileType(signPicture);
-			byte[] bytes = new BASE64Decoder().decodeBuffer(signPicture.substring(signPicture.indexOf("base64,") + 7 ));
+			Map<String, Object> map = queryServiceMapper.queryContractOne(args.getContractNumber());
+			byte[] bytes = new BASE64Decoder().decodeBuffer(signPicture.substring(signPicture.indexOf("base64,") + 7));
 			FileUtils.forceMkdir(new File(path));
-			File imageFile = new File(path, UUID.randomUUID().toString() + '.' + fileType);
+			String child = MapUtils.isEmpty(map) ? UUID.randomUUID().toString() : (map.get("outlet_no") + "_" + map.get("po_no"));
+			child += '.' + fileType;
+			File imageFile = new File(path, child);
 			FileUtils.writeByteArrayToFile(imageFile, bytes);
 			args.setPictureUrl(imageFile.getAbsolutePath());
 			mapper.savePicture(args);
